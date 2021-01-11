@@ -47,7 +47,9 @@ function init() {
     type: "bar",
     orientation: "h",
     x: prepBarData(targetSample.sample_values, 10),
-    y: prepBarData(targetSample.otu_ids, 10).map((id) => "OTU " + String(id)),
+    y: prepBarData(targetSample.otu_ids, 10).map(
+      (id) => "OTU " + String(id) + " "
+    ),
     text: prepBarData(targetSample.otu_labels, 10),
   };
 
@@ -146,7 +148,9 @@ function updateBarChart(data, name) {
   // Restyle to plot with newly selected data element
   Plotly.restyle("bar", "x", [prepBarData(targetSample.sample_values, 10)]);
   Plotly.restyle("bar", "y", [
-    prepBarData(targetSample.otu_ids, 10).map((id) => "OTU " + String(id)),
+    prepBarData(targetSample.otu_ids, 10).map(
+      (id) => "OTU " + String(id) + " "
+    ),
   ]);
   Plotly.restyle("bar", "text", [prepBarData(targetSample.otu_labels, 10)]);
 }
