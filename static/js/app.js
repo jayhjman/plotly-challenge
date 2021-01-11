@@ -58,8 +58,11 @@ function init() {
   // Trace needs to be wrapped in an array
   var data = [trace1];
 
+  var layout = {
+    xaxis: { title: "Sample Value" },
+  };
   // Plot the bar chart
-  Plotly.newPlot("bar", data);
+  Plotly.newPlot("bar", data, layout);
 
   var trace2 = {
     x: targetSample.otu_ids,
@@ -74,7 +77,11 @@ function init() {
 
   var data2 = [trace2];
 
-  Plotly.newPlot("bubble", data2);
+  var layout2 = {
+    xaxis: { title: "OTU ID" },
+  };
+
+  Plotly.newPlot("bubble", data2, layout2);
 }
 
 //
@@ -113,6 +120,8 @@ function updateDashboard() {
   updateDemograpicInfo(metaData, valueSelected);
 
   updateBarChart(samples, valueSelected);
+
+  updateBubbleChart(samples, valueSelected);
 
   //   console.log(`${valueSelected} updateDashboard`);
 }
@@ -168,4 +177,16 @@ function updateBarChart(data, name) {
     ),
   ]);
   Plotly.restyle("bar", "text", [prepBarData(targetSample.otu_labels, 10)]);
+}
+
+function updateBubbleChart(data, name) {
+  // Get the sample in question
+  var targetSample = samples.filter((sample) => sample.id === name)[0];
+
+  // Restyle to plot with newly selected data element
+  Plotly.restyle("bubble", "x", [targetSample.otu_ids]);
+  Plotly.restyle("bubble", "y", [targetSample.sample_values]);
+  Plotly.restyle("bubble", "marker.size", [targetSample.sample_values]);
+  Plotly.restyle("bubble", "marker.color", [targetSample.otu_ids]);
+  Plotly.restyle("bubble", "text", [targetSample.otu_labels]);
 }
