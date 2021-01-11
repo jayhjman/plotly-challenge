@@ -43,7 +43,7 @@ function init() {
   var targetSample = samples.filter((sample) => sample.id === names[0])[0];
 
   // create our bar trace
-  trace1 = {
+  var trace1 = {
     type: "bar",
     orientation: "h",
     x: prepBarData(targetSample.sample_values, 10),
@@ -60,6 +60,21 @@ function init() {
 
   // Plot the bar chart
   Plotly.newPlot("bar", data);
+
+  var trace2 = {
+    x: targetSample.otu_ids,
+    y: targetSample.sample_values,
+    mode: "markers",
+    marker: {
+      size: targetSample.sample_values,
+      color: targetSample.otu_ids,
+    },
+    text: targetSample.otu_labels,
+  };
+
+  var data2 = [trace2];
+
+  Plotly.newPlot("bubble", data2);
 }
 
 //
