@@ -37,6 +37,22 @@ function init() {
 
   // display demographics for named entity
   displayDemograpicInfo(metaData, names[0]);
+
+  var targetSample = samples.filter((sample) => sample.id === names[0])[0];
+
+  trace1 = {
+    type: "bar",
+    orientation: "h",
+    x: prepBarData(targetSample.sample_values, 10),
+    y: prepBarData(targetSample.otu_ids).map((id) => "OTU " + String(id)),
+    text: prepBarData(targetSample.otu_labels, 10),
+  };
+
+  //console.log(trace1);
+
+  var data = [trace1];
+
+  Plotly.newPlot("bar", data);
 }
 
 //
@@ -74,9 +90,14 @@ function updateDashboard() {
 
   displayDemograpicInfo(metaData, valueSelected);
 
-  console.log(`${valueSelected} updateDashboard`);
+  updateBarChart(samples, valueSelected);
+
+  //   console.log(`${valueSelected} updateDashboard`);
 }
 
+//
+// Display demographic data based upon data and name passed
+//
 function displayDemograpicInfo(data, name) {
   console.log(`${name} demographics display`);
 
@@ -93,4 +114,19 @@ function displayDemograpicInfo(data, name) {
   Object.entries(targetDemographic[0]).forEach(([key, value]) => {
     demographicsDiv.append("text").text(`${key}: ${value}`).append("p");
   });
+}
+
+function prepBarData(data, value) {
+  var slicedData = data.slice(0, value);
+  return slicedData.reverse();
+}
+
+function updateBarChart(data, name) {
+  var targetSample = samples.filter((sample) => sample.id === name)[0];
+
+  Plotly.restyle("bar", "x", [prepBarData(targetSample.sample_values, 10)]);
+  Plotly.restyle("bar", "y", [
+    prepBarData(targetSample.otu_ids).map((id) => "OTU " + String(id)),
+  ]);
+  Plotly.restyle("bar", "text", [prepBarData(targetSample.otu_labels, 10)]);
 }
