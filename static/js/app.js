@@ -38,20 +38,25 @@ function init() {
   // display demographics for named entity
   displayDemograpicInfo(metaData, names[0]);
 
+  // Get the targe sample identified bay name, filter returns array
+  // we want the first element.
   var targetSample = samples.filter((sample) => sample.id === names[0])[0];
 
+  // create our bar trace
   trace1 = {
     type: "bar",
     orientation: "h",
     x: prepBarData(targetSample.sample_values, 10),
-    y: prepBarData(targetSample.otu_ids).map((id) => "OTU " + String(id)),
+    y: prepBarData(targetSample.otu_ids, 10).map((id) => "OTU " + String(id)),
     text: prepBarData(targetSample.otu_labels, 10),
   };
 
   //console.log(trace1);
 
+  // Trace needs to be wrapped in an array
   var data = [trace1];
 
+  // Plot the bar chart
   Plotly.newPlot("bar", data);
 }
 
@@ -99,7 +104,7 @@ function updateDashboard() {
 // Display demographic data based upon data and name passed
 //
 function displayDemograpicInfo(data, name) {
-  console.log(`${name} demographics display`);
+  //   console.log(`${name} demographics display`);
 
   var demographicsDiv = d3.select("#sample-metadata");
 
@@ -116,17 +121,28 @@ function displayDemograpicInfo(data, name) {
   });
 }
 
+//
+// Prep the data to be displayed on the bar chart
+// We only want up to "value" in in the array passed
+// and we reverse to ensure proper data alignment
+//
 function prepBarData(data, value) {
   var slicedData = data.slice(0, value);
   return slicedData.reverse();
 }
 
+//
+// Updates bar chart on change to select drop down
+// uses plotly restyle to only update needed elements.
+//
 function updateBarChart(data, name) {
+  // Get the sample in question
   var targetSample = samples.filter((sample) => sample.id === name)[0];
 
+  // Restyle to plot with newly selected data element
   Plotly.restyle("bar", "x", [prepBarData(targetSample.sample_values, 10)]);
   Plotly.restyle("bar", "y", [
-    prepBarData(targetSample.otu_ids).map((id) => "OTU " + String(id)),
+    prepBarData(targetSample.otu_ids, 10).map((id) => "OTU " + String(id)),
   ]);
   Plotly.restyle("bar", "text", [prepBarData(targetSample.otu_labels, 10)]);
 }
