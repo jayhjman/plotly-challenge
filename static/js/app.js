@@ -28,9 +28,11 @@ function initApp(callBack) {
 // initialize the HTML elements and charts
 //
 function init() {
-  console.log(names);
-  console.log(metaData);
-  console.log(samples);
+  //console.log(names);
+  //console.log(metaData);
+  //console.log(samples);
+
+  populateDropdown(names);
 }
 
 //
@@ -39,3 +41,32 @@ function init() {
 //
 initApp(init);
 
+//
+// Populate the initial drop down with the values passed
+//
+function populateDropdown(values) {
+  // select the dropdown
+  var dropDown = d3.select("#selDataset");
+
+  // populate the options for the select list
+  var options = dropDown
+    .selectAll("option")
+    .data(values)
+    .enter()
+    .append("option")
+    .text((d) => d)
+    .attr("value", (d) => d);
+
+  // create the listener on change
+  dropDown.on("change", updateDashboard);
+}
+
+//
+// Update the dashboard elements on the select option change
+//
+function updateDashboard() {
+  // Get the value selected from the dropdown
+  var valueSelected = d3.select("#selDataset").node().value;
+
+  console.log(`${valueSelected} updateDashboard`);
+}
