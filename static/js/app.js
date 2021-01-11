@@ -32,7 +32,11 @@ function init() {
   //console.log(metaData);
   //console.log(samples);
 
+  // populate the dropdown
   populateDropdown(names);
+
+  // display demographics for named entity
+  displayDemograpicInfo(metaData, names[0]);
 }
 
 //
@@ -68,5 +72,25 @@ function updateDashboard() {
   // Get the value selected from the dropdown
   var valueSelected = d3.select("#selDataset").node().value;
 
+  displayDemograpicInfo(metaData, valueSelected);
+
   console.log(`${valueSelected} updateDashboard`);
+}
+
+function displayDemograpicInfo(data, name) {
+  console.log(`${name} demographics display`);
+
+  var demographicsDiv = d3.select("#sample-metadata");
+
+  demographicsDiv.html("");
+
+  var targetDemographic = data.filter(
+    (element) => element.id === parseInt(name)
+  );
+
+  //   console.log(targetDemographic[0]);
+
+  Object.entries(targetDemographic[0]).forEach(([key, value]) => {
+    demographicsDiv.append("text").text(`${key}: ${value}`).append("p");
+  });
 }
