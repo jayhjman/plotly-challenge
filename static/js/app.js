@@ -64,6 +64,7 @@ function init() {
   // Plot the bar chart
   Plotly.newPlot("bar", data, layout);
 
+  // Setup trace for the bubble chart
   var trace2 = {
     x: targetSample.otu_ids,
     y: targetSample.sample_values,
@@ -75,13 +76,18 @@ function init() {
     text: targetSample.otu_labels,
   };
 
+  // Trace needs to be wrapped in an array
   var data2 = [trace2];
 
+  // Define a layout
   var layout2 = {
     xaxis: { title: "OTU ID" },
   };
 
+  // Plot the bubble chart
   Plotly.newPlot("bubble", data2, layout2);
+
+  initializeGuage(metaData, names[0]);
 }
 
 //
@@ -122,6 +128,8 @@ function updateDashboard() {
   updateBarChart(samples, valueSelected);
 
   updateBubbleChart(samples, valueSelected);
+
+  updateGuage(metaData, valueSelected);
 
   //   console.log(`${valueSelected} updateDashboard`);
 }
@@ -179,6 +187,10 @@ function updateBarChart(data, name) {
   Plotly.restyle("bar", "text", [prepBarData(targetSample.otu_labels, 10)]);
 }
 
+//
+// Updates bubble chart on change to select drop down
+// uses plotly restyle to only update needed elements.
+//
 function updateBubbleChart(data, name) {
   // Get the sample in question
   var targetSample = samples.filter((sample) => sample.id === name)[0];
