@@ -1,10 +1,13 @@
-function initializeGuage(data, name) {
+function initializeGauge(data, name) {
+  // Get the metadata element from the dataset
   var targetMetaData = data.filter(
     (element) => element.id === parseInt(name)
   )[0];
 
+  // grab the washing frequency
   var wfreq = targetMetaData.wfreq;
 
+  // Setup data element for the gauge
   var data = [
     {
       domain: { x: [0, 1], y: [0, 1] },
@@ -36,19 +39,27 @@ function initializeGuage(data, name) {
     },
   ];
 
+  // Set the layout margins
   var layout = {
     margin: { t: 0, b: 0 },
   };
 
+  // Plot the gauge
   Plotly.newPlot("gauge", data, layout);
 }
 
-function updateGuage(data, name) {
+//
+// Update that gauge with the washing frequency
+//
+function updateGauge(data, name) {
+  // Get the metadata element from the dataset
   var targetMetaData = data.filter(
     (element) => element.id === parseInt(name)
   )[0];
 
+  // grab the washing frequency
   var wfreq = targetMetaData.wfreq;
 
+  // Restyle the plot
   Plotly.restyle("gauge", "value", [wfreq]);
 }

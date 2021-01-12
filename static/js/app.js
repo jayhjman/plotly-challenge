@@ -87,14 +87,9 @@ function init() {
   // Plot the bubble chart
   Plotly.newPlot("bubble", data2, layout2);
 
-  initializeGuage(metaData, names[0]);
+  // Initialize the guage on the page
+  initializeGauge(metaData, names[0]);
 }
-
-//
-// Initialize the application
-// init - callback function for specific elements and chart initialization
-//
-initApp(init);
 
 //
 // Populate the initial drop down with the values passed
@@ -129,7 +124,7 @@ function updateDashboard() {
 
   updateBubbleChart(samples, valueSelected);
 
-  updateGuage(metaData, valueSelected);
+  updateGauge(metaData, valueSelected);
 
   //   console.log(`${valueSelected} updateDashboard`);
 }
@@ -202,3 +197,9 @@ function updateBubbleChart(data, name) {
   Plotly.restyle("bubble", "marker.color", [targetSample.otu_ids]);
   Plotly.restyle("bubble", "text", [targetSample.otu_labels]);
 }
+
+//
+// Initialize the application
+// init - callback function for specific elements and chart initialization
+//
+initApp(init);
