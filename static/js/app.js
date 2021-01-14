@@ -35,8 +35,13 @@ function init() {
   // populate the dropdown
   populateDropdown(names);
 
+  // Pull the demographic based up first element of names array
+  var targetDemographic = metaData.filter(
+    (element) => element.id === parseInt(names[0])
+  )[0];
+
   // display demographics for named entity
-  updateDemograpicInfo(metaData, names[0]);
+  updateDemograpicInfo(targetDemographic);
 
   // Get the targe sample identified bay name, filter returns array
   // we want the first element.
@@ -118,7 +123,9 @@ function updateDashboard() {
   // Get the value selected from the dropdown
   var valueSelected = d3.select("#selDataset").node().value;
 
-  updateDemograpicInfo(metaData, valueSelected);
+  updateDemograpicInfo(
+    metaData.filter((element) => element.id === +valueSelected)[0]
+  );
 
   updateBarChart(samples, valueSelected);
 
@@ -130,9 +137,9 @@ function updateDashboard() {
 }
 
 //
-// Display demographic data based upon data and name passed
+// Display demographic data based upon data passed
 //
-function updateDemograpicInfo(data, name) {
+function updateDemograpicInfo(targetDemographic) {
   //   console.log(`${name} demographics display`);
 
   // Grab the div for demographics we are about to update
@@ -140,13 +147,6 @@ function updateDemograpicInfo(data, name) {
 
   // Clear out previous contents
   demographicsDiv.html("");
-
-  // Filter returns an array, we want the first element since this is unique
-  var targetDemographic = data.filter(
-    (element) => element.id === parseInt(name)
-  )[0];
-
-  //   console.log(targetDemographic[0]);
 
   // Loop through and display demographic keys and values
   Object.entries(targetDemographic).forEach(([key, value]) => {
