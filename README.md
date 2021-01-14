@@ -12,4 +12,14 @@
 
 - [`data/samples.json`](data/samples.json) - The source dataset for Belly Button Biodiversity.
 
-Cntrl + Click [here](https://jayhjman.github.io/plotly-challenge/) to open
+## Results
+
+- Please follow the instructions in the **_Execution_** section below
+
+## Execution
+
+1. To view the interactive dashboard page Cntrl + Click [here](https://jayhjman.github.io/plotly-challenge/) to open
+
+## Author
+
+Made by [Jay](https://www.linkedin.com/in/jay-hastings-techy/) with :heart: in 2020.
