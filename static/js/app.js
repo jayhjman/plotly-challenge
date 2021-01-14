@@ -1,3 +1,6 @@
+// Data location
+var dataLocation = "data/samples.json";
+
 // Placeholders for the data
 var names = [];
 var metaData = [];
@@ -9,7 +12,7 @@ var samples = [];
 //   2. Once #1 loaded run the callBack function
 //
 function initApp(callBack) {
-  d3.json("data/samples.json")
+  d3.json(dataLocation)
     .then((bellyButton) => {
       bellyButton.names.forEach((element) => {
         names.push(element);
@@ -28,24 +31,17 @@ function initApp(callBack) {
 // initialize the HTML elements and charts
 //
 function init() {
-  //console.log(names);
-  //console.log(metaData);
-  //console.log(samples);
-
   // populate the dropdown
   populateDropdown(names);
 
-  // Pull the demographic based up first element of names array
-  var targetDemographic = metaData.filter(
-    (element) => element.id === parseInt(names[0])
-  )[0];
+  // Pull the demographic from the metaData based upon first element of names array
+  var targetDemographic = getDemographic(names[0]);
+
+  // Get the target sample based upon first element of names array
+  var targetSample = getSample(names[0]);
 
   // display demographics for named entity
   updateDemograpicInfo(targetDemographic);
-
-  // Get the targe sample identified bay name, filter returns array
-  // we want the first element.
-  var targetSample = samples.filter((sample) => sample.id === names[0])[0];
 
   // create our bar trace
   var trace1 = {
@@ -58,14 +54,14 @@ function init() {
     text: prepBarData(targetSample.otu_labels, 10),
   };
 
-  //console.log(trace1);
-
   // Trace needs to be wrapped in an array
   var data = [trace1];
 
+  // Define a layout
   var layout = {
     xaxis: { title: "Sample Value" },
   };
+
   // Plot the bar chart
   Plotly.newPlot("bar", data, layout);
 
@@ -93,7 +89,21 @@ function init() {
   Plotly.newPlot("bubble", data2, layout2);
 
   // Initialize the guage on the page
-  initializeGauge(metaData, names[0]);
+  initializeGauge(targetDemographic);
+}
+
+//
+// Function to pull out correct demographic
+//
+function getDemographic(id) {
+  return metaData.filter((element) => element.id === +id)[0];
+}
+
+//
+// Function to pull out correct sample
+//
+function getSample(id) {
+  return samples.filter((element) => element.id === id)[0];
 }
 
 //
@@ -123,25 +133,22 @@ function updateDashboard() {
   // Get the value selected from the dropdown
   var valueSelected = d3.select("#selDataset").node().value;
 
-  updateDemograpicInfo(
-    metaData.filter((element) => element.id === +valueSelected)[0]
-  );
+  // Get the demographic metaData in question
+  var targetDemographic = getDemographic(valueSelected);
 
-  updateBarChart(samples, valueSelected);
+  // Get the sample in question
+  var targetSample = getSample(valueSelected);
 
-  updateBubbleChart(samples, valueSelected);
-
-  updateGauge(metaData, valueSelected);
-
-  //   console.log(`${valueSelected} updateDashboard`);
+  updateDemograpicInfo(targetDemographic);
+  updateBarChart(targetSample);
+  updateBubbleChart(targetSample);
+  updateGauge(targetDemographic);
 }
 
 //
 // Display demographic data based upon data passed
 //
 function updateDemograpicInfo(targetDemographic) {
-  //   console.log(`${name} demographics display`);
-
   // Grab the div for demographics we are about to update
   var demographicsDiv = d3.select("#sample-metadata");
 
@@ -168,10 +175,7 @@ function prepBarData(data, value) {
 // Updates bar chart on change to select drop down
 // uses plotly restyle to only update needed elements.
 //
-function updateBarChart(data, name) {
-  // Get the sample in question
-  var targetSample = samples.filter((sample) => sample.id === name)[0];
-
+function updateBarChart(targetSample) {
   // Restyle to plot with newly selected data element
   Plotly.restyle("bar", "x", [prepBarData(targetSample.sample_values, 10)]);
   Plotly.restyle("bar", "y", [
@@ -186,10 +190,7 @@ function updateBarChart(data, name) {
 // Updates bubble chart on change to select drop down
 // uses plotly restyle to only update needed elements.
 //
-function updateBubbleChart(data, name) {
-  // Get the sample in question
-  var targetSample = samples.filter((sample) => sample.id === name)[0];
-
+function updateBubbleChart(targetSample) {
   // Restyle to plot with newly selected data element
   Plotly.restyle("bubble", "x", [targetSample.otu_ids]);
   Plotly.restyle("bubble", "y", [targetSample.sample_values]);

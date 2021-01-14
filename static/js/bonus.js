@@ -1,17 +1,9 @@
-function initializeGauge(data, name) {
-  // Get the metadata element from the dataset
-  var targetMetaData = data.filter(
-    (element) => element.id === parseInt(name)
-  )[0];
-
-  // grab the washing frequency
-  var wfreq = targetMetaData.wfreq;
-
+function initializeGauge(targetDemographic) {
   // Setup data element for the gauge
   var data = [
     {
       domain: { x: [0, 1], y: [0, 1] },
-      value: wfreq,
+      value: targetDemographic.wfreq,
       type: "indicator",
       title: {
         text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week",
@@ -51,15 +43,7 @@ function initializeGauge(data, name) {
 //
 // Update that gauge with the washing frequency
 //
-function updateGauge(data, name) {
-  // Get the metadata element from the dataset
-  var targetMetaData = data.filter(
-    (element) => element.id === parseInt(name)
-  )[0];
-
-  // grab the washing frequency
-  var wfreq = targetMetaData.wfreq;
-
+function updateGauge(targetDemographic) {
   // Restyle the plot
-  Plotly.restyle("gauge", "value", [wfreq]);
+  Plotly.restyle("gauge", "value", [targetDemographic.wfreq]);
 }
