@@ -14,7 +14,8 @@
 
 ## Results
 
-- Please follow the instructions in the **_Execution_** section below
+![screen_1](images/screen_1.jpg)
+![screen_2](images/screen_2.jpg)
 
 ## Execution
 
