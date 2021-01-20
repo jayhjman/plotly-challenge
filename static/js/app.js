@@ -73,6 +73,7 @@ function init() {
     marker: {
       size: targetSample.sample_values,
       color: targetSample.otu_ids,
+      colorscale: "Jet",
     },
     text: targetSample.otu_labels,
   };
